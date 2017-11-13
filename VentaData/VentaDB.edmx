@@ -1,0 +1,746 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="shoppingwebModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="carrito">
+          <Key>
+            <PropertyRef Name="id_carrito" />
+          </Key>
+          <Property Name="id_carrito" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="fecha" Type="date" Nullable="false" />
+          <Property Name="cantidad" Type="int" Nullable="false" />
+          <Property Name="precio" Type="money" />
+          <Property Name="cod_producto" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="estado" Type="bit" />
+        </EntityType>
+        <EntityType Name="categorias">
+          <Key>
+            <PropertyRef Name="id_cat" />
+          </Key>
+          <Property Name="id_cat" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="25" Nullable="false" />
+        </EntityType>
+        <EntityType Name="cliente">
+          <Key>
+            <PropertyRef Name="id_cliente" />
+          </Key>
+          <Property Name="id_cliente" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="apellidos" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="contraseña" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="telefono" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="direccion" Type="varchar" MaxLength="30" />
+          <Property Name="genero" Type="varchar" MaxLength="10" />
+          <Property Name="id_rol" Type="char" MaxLength="6" Nullable="false" />
+        </EntityType>
+        <EntityType Name="detalleorden">
+          <Key>
+            <PropertyRef Name="num_orden" />
+            <PropertyRef Name="cod_producto" />
+          </Key>
+          <Property Name="num_orden" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="cod_producto" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="cantidad" Type="int" Nullable="false" />
+          <Property Name="importe" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="estado_orden">
+          <Key>
+            <PropertyRef Name="id_orden" />
+          </Key>
+          <Property Name="id_orden" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <EntityType Name="marca">
+          <Key>
+            <PropertyRef Name="id_marca" />
+          </Key>
+          <Property Name="id_marca" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="nombre_marca" Type="varchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="orden">
+          <Key>
+            <PropertyRef Name="num_orden" />
+          </Key>
+          <Property Name="num_orden" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="fecha_emi" Type="date" Nullable="false" />
+          <Property Name="id_cliente" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="monto" Type="money" Nullable="false" />
+          <Property Name="descuento" Type="money" Nullable="false" />
+          <Property Name="shipping_date" Type="date" Nullable="false" />
+          <Property Name="shipping_lugar" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="id_orden" Type="char" MaxLength="6" Nullable="false" />
+        </EntityType>
+        <EntityType Name="producto">
+          <Key>
+            <PropertyRef Name="cod_producto" />
+          </Key>
+          <Property Name="cod_producto" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="precio_compra" Type="money" Nullable="false" />
+          <Property Name="precio_venta" Type="money" Nullable="false" />
+          <Property Name="stock" Type="int" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="100" />
+          <Property Name="foto1" Type="varbinary(max)" />
+          <Property Name="foto2" Type="varbinary(max)" />
+          <Property Name="foto3" Type="varbinary(max)" />
+          <Property Name="id_marca" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="id_cat" Type="char" MaxLength="4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="rol">
+          <Key>
+            <PropertyRef Name="id_rol" />
+          </Key>
+          <Property Name="id_rol" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="estado" Type="bit" />
+        </EntityType>
+        <Association Name="FK__carrito__cod_pro__5165187F">
+          <End Role="producto" Type="Self.producto" Multiplicity="1" />
+          <End Role="carrito" Type="Self.carrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producto">
+              <PropertyRef Name="cod_producto" />
+            </Principal>
+            <Dependent Role="carrito">
+              <PropertyRef Name="cod_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cliente__id_rol__5629CD9C">
+          <End Role="rol" Type="Self.rol" Multiplicity="1" />
+          <End Role="cliente" Type="Self.cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="rol">
+              <PropertyRef Name="id_rol" />
+            </Principal>
+            <Dependent Role="cliente">
+              <PropertyRef Name="id_rol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__detalleor__cod_p__5FB337D6">
+          <End Role="producto" Type="Self.producto" Multiplicity="1" />
+          <End Role="detalleorden" Type="Self.detalleorden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producto">
+              <PropertyRef Name="cod_producto" />
+            </Principal>
+            <Dependent Role="detalleorden">
+              <PropertyRef Name="cod_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__detalleor__num_o__5EBF139D">
+          <End Role="orden" Type="Self.orden" Multiplicity="1" />
+          <End Role="detalleorden" Type="Self.detalleorden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="orden">
+              <PropertyRef Name="num_orden" />
+            </Principal>
+            <Dependent Role="detalleorden">
+              <PropertyRef Name="num_orden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__orden__id_client__5AEE82B9">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="orden" Type="Self.orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id_cliente" />
+            </Principal>
+            <Dependent Role="orden">
+              <PropertyRef Name="id_cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__orden__id_orden__5BE2A6F2">
+          <End Role="estado_orden" Type="Self.estado_orden" Multiplicity="1" />
+          <End Role="orden" Type="Self.orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="estado_orden">
+              <PropertyRef Name="id_orden" />
+            </Principal>
+            <Dependent Role="orden">
+              <PropertyRef Name="id_orden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__producto__id_cat__4E88ABD4">
+          <End Role="categorias" Type="Self.categorias" Multiplicity="1" />
+          <End Role="producto" Type="Self.producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categorias">
+              <PropertyRef Name="id_cat" />
+            </Principal>
+            <Dependent Role="producto">
+              <PropertyRef Name="id_cat" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__producto__id_mar__4D94879B">
+          <End Role="marca" Type="Self.marca" Multiplicity="1" />
+          <End Role="producto" Type="Self.producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="marca">
+              <PropertyRef Name="id_marca" />
+            </Principal>
+            <Dependent Role="producto">
+              <PropertyRef Name="id_marca" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="sp_ListCategorias" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_login" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="user" Type="varchar" Mode="In" />
+          <Parameter Name="pass" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_Productos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_SelectProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="char" Mode="In" />
+        </Function>
+        <Function Name="sp_traerfoto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="shoppingwebModelStoreContainer">
+          <EntitySet Name="carrito" EntityType="Self.carrito" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="categorias" EntityType="Self.categorias" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cliente" EntityType="Self.cliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="detalleorden" EntityType="Self.detalleorden" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="estado_orden" EntityType="Self.estado_orden" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="marca" EntityType="Self.marca" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="orden" EntityType="Self.orden" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="producto" EntityType="Self.producto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="rol" EntityType="Self.rol" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__carrito__cod_pro__5165187F" Association="Self.FK__carrito__cod_pro__5165187F">
+            <End Role="producto" EntitySet="producto" />
+            <End Role="carrito" EntitySet="carrito" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cliente__id_rol__5629CD9C" Association="Self.FK__cliente__id_rol__5629CD9C">
+            <End Role="rol" EntitySet="rol" />
+            <End Role="cliente" EntitySet="cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK__detalleor__cod_p__5FB337D6" Association="Self.FK__detalleor__cod_p__5FB337D6">
+            <End Role="producto" EntitySet="producto" />
+            <End Role="detalleorden" EntitySet="detalleorden" />
+          </AssociationSet>
+          <AssociationSet Name="FK__detalleor__num_o__5EBF139D" Association="Self.FK__detalleor__num_o__5EBF139D">
+            <End Role="orden" EntitySet="orden" />
+            <End Role="detalleorden" EntitySet="detalleorden" />
+          </AssociationSet>
+          <AssociationSet Name="FK__orden__id_client__5AEE82B9" Association="Self.FK__orden__id_client__5AEE82B9">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="orden" EntitySet="orden" />
+          </AssociationSet>
+          <AssociationSet Name="FK__orden__id_orden__5BE2A6F2" Association="Self.FK__orden__id_orden__5BE2A6F2">
+            <End Role="estado_orden" EntitySet="estado_orden" />
+            <End Role="orden" EntitySet="orden" />
+          </AssociationSet>
+          <AssociationSet Name="FK__producto__id_cat__4E88ABD4" Association="Self.FK__producto__id_cat__4E88ABD4">
+            <End Role="categorias" EntitySet="categorias" />
+            <End Role="producto" EntitySet="producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK__producto__id_mar__4D94879B" Association="Self.FK__producto__id_mar__4D94879B">
+            <End Role="marca" EntitySet="marca" />
+            <End Role="producto" EntitySet="producto" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="shoppingwebModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="carrito">
+          <Key>
+            <PropertyRef Name="id_carrito" />
+          </Key>
+          <Property Name="id_carrito" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <Property Name="precio" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="cod_producto" Type="String" MaxLength="5" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="estado" Type="Boolean" />
+          <NavigationProperty Name="producto" Relationship="Self.FK__carrito__cod_pro__5165187F" FromRole="carrito" ToRole="producto" />
+        </EntityType>
+        <EntityType Name="categorias">
+          <Key>
+            <PropertyRef Name="id_cat" />
+          </Key>
+          <Property Name="id_cat" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="producto" Relationship="Self.FK__producto__id_cat__4E88ABD4" FromRole="categorias" ToRole="producto" />
+        </EntityType>
+        <EntityType Name="cliente">
+          <Key>
+            <PropertyRef Name="id_cliente" />
+          </Key>
+          <Property Name="id_cliente" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="apellidos" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="contraseña" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="telefono" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="direccion" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="genero" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="id_rol" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="rol" Relationship="Self.FK__cliente__id_rol__5629CD9C" FromRole="cliente" ToRole="rol" />
+          <NavigationProperty Name="orden" Relationship="Self.FK__orden__id_client__5AEE82B9" FromRole="cliente" ToRole="orden" />
+        </EntityType>
+        <EntityType Name="detalleorden">
+          <Key>
+            <PropertyRef Name="num_orden" />
+            <PropertyRef Name="cod_producto" />
+          </Key>
+          <Property Name="num_orden" Type="String" MaxLength="8" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="cod_producto" Type="String" MaxLength="5" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <Property Name="importe" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="producto" Relationship="Self.FK__detalleor__cod_p__5FB337D6" FromRole="detalleorden" ToRole="producto" />
+          <NavigationProperty Name="orden" Relationship="Self.FK__detalleor__num_o__5EBF139D" FromRole="detalleorden" ToRole="orden" />
+        </EntityType>
+        <EntityType Name="estado_orden">
+          <Key>
+            <PropertyRef Name="id_orden" />
+          </Key>
+          <Property Name="id_orden" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="orden" Relationship="Self.FK__orden__id_orden__5BE2A6F2" FromRole="estado_orden" ToRole="orden" />
+        </EntityType>
+        <EntityType Name="marca">
+          <Key>
+            <PropertyRef Name="id_marca" />
+          </Key>
+          <Property Name="id_marca" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="nombre_marca" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="producto" Relationship="Self.FK__producto__id_mar__4D94879B" FromRole="marca" ToRole="producto" />
+        </EntityType>
+        <EntityType Name="orden">
+          <Key>
+            <PropertyRef Name="num_orden" />
+          </Key>
+          <Property Name="num_orden" Type="String" MaxLength="8" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="fecha_emi" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="id_cliente" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="monto" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="descuento" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="shipping_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="shipping_lugar" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="id_orden" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="cliente" Relationship="Self.FK__orden__id_client__5AEE82B9" FromRole="orden" ToRole="cliente" />
+          <NavigationProperty Name="detalleorden" Relationship="Self.FK__detalleor__num_o__5EBF139D" FromRole="orden" ToRole="detalleorden" />
+          <NavigationProperty Name="estado_orden" Relationship="Self.FK__orden__id_orden__5BE2A6F2" FromRole="orden" ToRole="estado_orden" />
+        </EntityType>
+        <EntityType Name="producto">
+          <Key>
+            <PropertyRef Name="cod_producto" />
+          </Key>
+          <Property Name="cod_producto" Type="String" MaxLength="5" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="precio_compra" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="precio_venta" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="stock" Type="Int32" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="foto1" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="foto2" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="foto3" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="id_marca" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="id_cat" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="carrito" Relationship="Self.FK__carrito__cod_pro__5165187F" FromRole="producto" ToRole="carrito" />
+          <NavigationProperty Name="categorias" Relationship="Self.FK__producto__id_cat__4E88ABD4" FromRole="producto" ToRole="categorias" />
+          <NavigationProperty Name="detalleorden" Relationship="Self.FK__detalleor__cod_p__5FB337D6" FromRole="producto" ToRole="detalleorden" />
+          <NavigationProperty Name="marca" Relationship="Self.FK__producto__id_mar__4D94879B" FromRole="producto" ToRole="marca" />
+        </EntityType>
+        <EntityType Name="rol">
+          <Key>
+            <PropertyRef Name="id_rol" />
+          </Key>
+          <Property Name="id_rol" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="estado" Type="Boolean" />
+          <NavigationProperty Name="cliente" Relationship="Self.FK__cliente__id_rol__5629CD9C" FromRole="rol" ToRole="cliente" />
+        </EntityType>
+        <Association Name="FK__carrito__cod_pro__5165187F">
+          <End Role="producto" Type="Self.producto" Multiplicity="1" />
+          <End Role="carrito" Type="Self.carrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producto">
+              <PropertyRef Name="cod_producto" />
+            </Principal>
+            <Dependent Role="carrito">
+              <PropertyRef Name="cod_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__producto__id_cat__4E88ABD4">
+          <End Role="categorias" Type="Self.categorias" Multiplicity="1" />
+          <End Role="producto" Type="Self.producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categorias">
+              <PropertyRef Name="id_cat" />
+            </Principal>
+            <Dependent Role="producto">
+              <PropertyRef Name="id_cat" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cliente__id_rol__5629CD9C">
+          <End Role="rol" Type="Self.rol" Multiplicity="1" />
+          <End Role="cliente" Type="Self.cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="rol">
+              <PropertyRef Name="id_rol" />
+            </Principal>
+            <Dependent Role="cliente">
+              <PropertyRef Name="id_rol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__orden__id_client__5AEE82B9">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="orden" Type="Self.orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id_cliente" />
+            </Principal>
+            <Dependent Role="orden">
+              <PropertyRef Name="id_cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__detalleor__cod_p__5FB337D6">
+          <End Role="producto" Type="Self.producto" Multiplicity="1" />
+          <End Role="detalleorden" Type="Self.detalleorden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producto">
+              <PropertyRef Name="cod_producto" />
+            </Principal>
+            <Dependent Role="detalleorden">
+              <PropertyRef Name="cod_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__detalleor__num_o__5EBF139D">
+          <End Role="orden" Type="Self.orden" Multiplicity="1" />
+          <End Role="detalleorden" Type="Self.detalleorden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="orden">
+              <PropertyRef Name="num_orden" />
+            </Principal>
+            <Dependent Role="detalleorden">
+              <PropertyRef Name="num_orden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__orden__id_orden__5BE2A6F2">
+          <End Role="estado_orden" Type="Self.estado_orden" Multiplicity="1" />
+          <End Role="orden" Type="Self.orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="estado_orden">
+              <PropertyRef Name="id_orden" />
+            </Principal>
+            <Dependent Role="orden">
+              <PropertyRef Name="id_orden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__producto__id_mar__4D94879B">
+          <End Role="marca" Type="Self.marca" Multiplicity="1" />
+          <End Role="producto" Type="Self.producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="marca">
+              <PropertyRef Name="id_marca" />
+            </Principal>
+            <Dependent Role="producto">
+              <PropertyRef Name="id_marca" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="shoppingwebEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="carrito" EntityType="Self.carrito" />
+          <EntitySet Name="categorias" EntityType="Self.categorias" />
+          <EntitySet Name="cliente" EntityType="Self.cliente" />
+          <EntitySet Name="detalleorden" EntityType="Self.detalleorden" />
+          <EntitySet Name="estado_orden" EntityType="Self.estado_orden" />
+          <EntitySet Name="marca" EntityType="Self.marca" />
+          <EntitySet Name="orden" EntityType="Self.orden" />
+          <EntitySet Name="producto" EntityType="Self.producto" />
+          <EntitySet Name="rol" EntityType="Self.rol" />
+          <AssociationSet Name="FK__carrito__cod_pro__5165187F" Association="Self.FK__carrito__cod_pro__5165187F">
+            <End Role="producto" EntitySet="producto" />
+            <End Role="carrito" EntitySet="carrito" />
+          </AssociationSet>
+          <AssociationSet Name="FK__producto__id_cat__4E88ABD4" Association="Self.FK__producto__id_cat__4E88ABD4">
+            <End Role="categorias" EntitySet="categorias" />
+            <End Role="producto" EntitySet="producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cliente__id_rol__5629CD9C" Association="Self.FK__cliente__id_rol__5629CD9C">
+            <End Role="rol" EntitySet="rol" />
+            <End Role="cliente" EntitySet="cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK__orden__id_client__5AEE82B9" Association="Self.FK__orden__id_client__5AEE82B9">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="orden" EntitySet="orden" />
+          </AssociationSet>
+          <AssociationSet Name="FK__detalleor__cod_p__5FB337D6" Association="Self.FK__detalleor__cod_p__5FB337D6">
+            <End Role="producto" EntitySet="producto" />
+            <End Role="detalleorden" EntitySet="detalleorden" />
+          </AssociationSet>
+          <AssociationSet Name="FK__detalleor__num_o__5EBF139D" Association="Self.FK__detalleor__num_o__5EBF139D">
+            <End Role="orden" EntitySet="orden" />
+            <End Role="detalleorden" EntitySet="detalleorden" />
+          </AssociationSet>
+          <AssociationSet Name="FK__orden__id_orden__5BE2A6F2" Association="Self.FK__orden__id_orden__5BE2A6F2">
+            <End Role="estado_orden" EntitySet="estado_orden" />
+            <End Role="orden" EntitySet="orden" />
+          </AssociationSet>
+          <AssociationSet Name="FK__producto__id_mar__4D94879B" Association="Self.FK__producto__id_mar__4D94879B">
+            <End Role="marca" EntitySet="marca" />
+            <End Role="producto" EntitySet="producto" />
+          </AssociationSet>
+          <FunctionImport Name="sp_ListCategorias" ReturnType="Collection(shoppingwebModel.sp_ListCategorias_Result)" />
+          <FunctionImport Name="sp_login" ReturnType="Collection(shoppingwebModel.sp_login_Result)">
+            <Parameter Name="user" Mode="In" Type="String" />
+            <Parameter Name="pass" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Productos" ReturnType="Collection(shoppingwebModel.sp_Productos_Result)" />
+          <FunctionImport Name="sp_SelectProduct" ReturnType="Collection(shoppingwebModel.sp_SelectProduct_Result)">
+            <Parameter Name="id" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_traerfoto" ReturnType="Collection(Binary)">
+            <Parameter Name="id" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="sp_ListCategorias_Result">
+          <Property Type="String" Name="id_cat" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="nombre" Nullable="false" MaxLength="25" />
+        </ComplexType>
+        <ComplexType Name="sp_login_Result">
+          <Property Type="String" Name="id_cliente" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="nombre" Nullable="false" MaxLength="45" />
+          <Property Type="String" Name="apellidos" Nullable="false" MaxLength="45" />
+          <Property Type="String" Name="email" Nullable="false" MaxLength="45" />
+          <Property Type="String" Name="contraseña" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="telefono" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="direccion" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="genero" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="id_rol" Nullable="false" MaxLength="6" />
+        </ComplexType>
+        <ComplexType Name="sp_Productos_Result">
+          <Property Type="String" Name="cod_producto" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="nombre" Nullable="false" MaxLength="25" />
+          <Property Type="Decimal" Name="precio_compra" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="precio_venta" Nullable="false" Precision="19" />
+          <Property Type="Int32" Name="stock" Nullable="false" />
+          <Property Type="String" Name="descripcion" Nullable="true" MaxLength="100" />
+          <Property Type="Binary" Name="foto1" Nullable="true" />
+          <Property Type="Binary" Name="foto2" Nullable="true" />
+          <Property Type="Binary" Name="foto3" Nullable="true" />
+          <Property Type="String" Name="id_marca" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="id_cat" Nullable="false" MaxLength="4" />
+        </ComplexType>
+        <ComplexType Name="sp_SelectProduct_Result">
+          <Property Type="String" Name="cod_producto" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="nombre" Nullable="false" MaxLength="25" />
+          <Property Type="Decimal" Name="precio_compra" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="precio_venta" Nullable="false" Precision="19" />
+          <Property Type="Int32" Name="stock" Nullable="false" />
+          <Property Type="String" Name="descripcion" Nullable="true" MaxLength="100" />
+          <Property Type="Binary" Name="foto1" Nullable="true" />
+          <Property Type="Binary" Name="foto2" Nullable="true" />
+          <Property Type="Binary" Name="foto3" Nullable="true" />
+          <Property Type="String" Name="id_marca" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="id_cat" Nullable="false" MaxLength="4" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="shoppingwebModelStoreContainer" CdmEntityContainer="shoppingwebEntities">
+          <EntitySetMapping Name="carrito">
+            <EntityTypeMapping TypeName="shoppingwebModel.carrito">
+              <MappingFragment StoreEntitySet="carrito">
+                <ScalarProperty Name="id_carrito" ColumnName="id_carrito" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
+                <ScalarProperty Name="cod_producto" ColumnName="cod_producto" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="categorias">
+            <EntityTypeMapping TypeName="shoppingwebModel.categorias">
+              <MappingFragment StoreEntitySet="categorias">
+                <ScalarProperty Name="id_cat" ColumnName="id_cat" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cliente">
+            <EntityTypeMapping TypeName="shoppingwebModel.cliente">
+              <MappingFragment StoreEntitySet="cliente">
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellidos" ColumnName="apellidos" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="contraseña" ColumnName="contraseña" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+                <ScalarProperty Name="genero" ColumnName="genero" />
+                <ScalarProperty Name="id_rol" ColumnName="id_rol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="detalleorden">
+            <EntityTypeMapping TypeName="shoppingwebModel.detalleorden">
+              <MappingFragment StoreEntitySet="detalleorden">
+                <ScalarProperty Name="num_orden" ColumnName="num_orden" />
+                <ScalarProperty Name="cod_producto" ColumnName="cod_producto" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="importe" ColumnName="importe" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="estado_orden">
+            <EntityTypeMapping TypeName="shoppingwebModel.estado_orden">
+              <MappingFragment StoreEntitySet="estado_orden">
+                <ScalarProperty Name="id_orden" ColumnName="id_orden" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="marca">
+            <EntityTypeMapping TypeName="shoppingwebModel.marca">
+              <MappingFragment StoreEntitySet="marca">
+                <ScalarProperty Name="id_marca" ColumnName="id_marca" />
+                <ScalarProperty Name="nombre_marca" ColumnName="nombre_marca" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="orden">
+            <EntityTypeMapping TypeName="shoppingwebModel.orden">
+              <MappingFragment StoreEntitySet="orden">
+                <ScalarProperty Name="num_orden" ColumnName="num_orden" />
+                <ScalarProperty Name="fecha_emi" ColumnName="fecha_emi" />
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="monto" ColumnName="monto" />
+                <ScalarProperty Name="descuento" ColumnName="descuento" />
+                <ScalarProperty Name="shipping_date" ColumnName="shipping_date" />
+                <ScalarProperty Name="shipping_lugar" ColumnName="shipping_lugar" />
+                <ScalarProperty Name="id_orden" ColumnName="id_orden" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="producto">
+            <EntityTypeMapping TypeName="shoppingwebModel.producto">
+              <MappingFragment StoreEntitySet="producto">
+                <ScalarProperty Name="cod_producto" ColumnName="cod_producto" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="precio_compra" ColumnName="precio_compra" />
+                <ScalarProperty Name="precio_venta" ColumnName="precio_venta" />
+                <ScalarProperty Name="stock" ColumnName="stock" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="foto1" ColumnName="foto1" />
+                <ScalarProperty Name="foto2" ColumnName="foto2" />
+                <ScalarProperty Name="foto3" ColumnName="foto3" />
+                <ScalarProperty Name="id_marca" ColumnName="id_marca" />
+                <ScalarProperty Name="id_cat" ColumnName="id_cat" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rol">
+            <EntityTypeMapping TypeName="shoppingwebModel.rol">
+              <MappingFragment StoreEntitySet="rol">
+                <ScalarProperty Name="id_rol" ColumnName="id_rol" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_ListCategorias" FunctionName="shoppingwebModel.Store.sp_ListCategorias">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="shoppingwebModel.sp_ListCategorias_Result">
+                <ScalarProperty Name="id_cat" ColumnName="id_cat" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_login" FunctionName="shoppingwebModel.Store.sp_login">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="shoppingwebModel.sp_login_Result">
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellidos" ColumnName="apellidos" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="contraseña" ColumnName="contraseña" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+                <ScalarProperty Name="genero" ColumnName="genero" />
+                <ScalarProperty Name="id_rol" ColumnName="id_rol" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Productos" FunctionName="shoppingwebModel.Store.sp_Productos">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="shoppingwebModel.sp_Productos_Result">
+                <ScalarProperty Name="cod_producto" ColumnName="cod_producto" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="precio_compra" ColumnName="precio_compra" />
+                <ScalarProperty Name="precio_venta" ColumnName="precio_venta" />
+                <ScalarProperty Name="stock" ColumnName="stock" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="foto1" ColumnName="foto1" />
+                <ScalarProperty Name="foto2" ColumnName="foto2" />
+                <ScalarProperty Name="foto3" ColumnName="foto3" />
+                <ScalarProperty Name="id_marca" ColumnName="id_marca" />
+                <ScalarProperty Name="id_cat" ColumnName="id_cat" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_SelectProduct" FunctionName="shoppingwebModel.Store.sp_SelectProduct">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="shoppingwebModel.sp_SelectProduct_Result">
+                <ScalarProperty Name="cod_producto" ColumnName="cod_producto" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="precio_compra" ColumnName="precio_compra" />
+                <ScalarProperty Name="precio_venta" ColumnName="precio_venta" />
+                <ScalarProperty Name="stock" ColumnName="stock" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="foto1" ColumnName="foto1" />
+                <ScalarProperty Name="foto2" ColumnName="foto2" />
+                <ScalarProperty Name="foto3" ColumnName="foto3" />
+                <ScalarProperty Name="id_marca" ColumnName="id_marca" />
+                <ScalarProperty Name="id_cat" ColumnName="id_cat" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_traerfoto" FunctionName="shoppingwebModel.Store.sp_traerfoto" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
